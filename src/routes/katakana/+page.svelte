@@ -2,15 +2,16 @@
 	import InputTest from '$lib/components/input-quiz.svelte';
 	import SelfTest from '$lib/components/self-quiz.svelte';
 	import { QuizService, entryFromArray } from '$lib/services/quiz.service';
-	import { katakana } from '$lib/data';
-	import type { Entry } from '$lib/model';
+	import { katakana, words } from '$lib/data';
 	import { Tab, TabGroup } from '@skeletonlabs/skeleton';
 
 	let tabSet: number = 0;
 
-	const pairs: Entry[] = Object.entries(katakana.basic).map(e => entryFromArray(e));
 	const factory = new QuizService();
-	factory.pairs = pairs;
+	factory.pairs = Object.entries(katakana.basic).map(e => entryFromArray(e));
+
+	const wordsFactory = new QuizService();
+	wordsFactory.pairs = Object.entries(words.katakana).map(e => entryFromArray(e));
 </script>
 
 <div class="container h-full mx-auto flex justify-center items-center">
@@ -24,12 +25,17 @@
 			<Tab bind:group={tabSet} name="tab2" value={1}>
 				Self
 			</Tab>
+			<Tab bind:group={tabSet} name="tab3" value={2}>
+				Words
+			</Tab>
 			<!-- Tab Panels --->
 			<svelte:fragment slot="panel">
 				{#if tabSet === 0}
 					<InputTest factory={factory} />
 				{:else if tabSet === 1}
 					<SelfTest factory={factory} />
+				{:else if tabSet === 2}
+					<SelfTest factory={wordsFactory} words={1} />
 				{/if}
 			</svelte:fragment>
 		</TabGroup>

@@ -4,10 +4,12 @@
 	import GradeDisplay from '$lib/components/grade-display.svelte';
 	import Tooltip from '$lib/components/tooltip.svelte';
 
+	export let words = 4;
+
 	export let factory = new QuizService();
 
 	const pairsLength = factory.length();
-	const questions = factory.createQuiz();
+	const questions = factory.createQuiz(1, words);
 	const status: number[][] = questions.map(q => q.word.map(() => 0));
 
 	function onCharClick(questionIndex: number, charIndex: number) {
@@ -34,9 +36,9 @@
 
 <Tooltip tooltipContent="Tap once if your answer is correct, twice if you aren't" />
 
-<div class="columns-md pt-2">
+<div class="columns-1 pt-2">
 	{#each questions as question, questionIndex}
-		<div class="columns-4 py-2">
+		<div class="columns-{words} py-2">
 			{#each question.word as c, charIndex}
 				<div>
 					<button
